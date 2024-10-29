@@ -29,7 +29,7 @@ class TestRoutePlannerView:
             'start_location': 'London, UK',
             'finish_location': 'New York, NY'
         }
-        response = self.client.post('/routeplanner/plan-route/', data, format='json')
+        response = self.client.post('/api/plan-route', data, format='json')
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert 'start_location' in response.data
@@ -49,7 +49,7 @@ class TestRoutePlannerView:
             'start_location': 'Seattle, WA',
             'finish_location': 'Tokyo, Japan'
         }
-        response = self.client.post('/routeplanner/plan-route/', data, format='json')
+        response = self.client.post('/api/plan-route', data, format='json')
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert 'finish_location' in response.data
@@ -71,7 +71,7 @@ class TestRoutePlannerView:
             'start_location': 'Chicago, IL',
             'finish_location': 'Miami, FL'
         }
-        response = self.client.post('/routeplanner/plan-route/', data, format='json')
+        response = self.client.post('/api/plan-route', data, format='json')
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert 'error' in response.data
@@ -91,7 +91,7 @@ class TestRoutePlannerView:
             'start_location': 'Los Angeles, CA',
             'finish_location': 'New York, NY'
         }
-        response = self.client.post('/routeplanner/plan-route/', data, format='json')
+        response = self.client.post('/api/plan-route', data, format='json')
 
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data['fuel_stops']) > 1
@@ -109,7 +109,7 @@ class TestRoutePlannerView:
             'start_location': 'Las Vegas, NV',
             'finish_location': 'Denver, CO'
         }
-        response = self.client.post('/routeplanner/plan-route/', data, format='json')
+        response = self.client.post('/api/plan-route', data, format='json')
 
         assert response.status_code == status.HTTP_200_OK
         assert 'fuel_stops' in response.data
