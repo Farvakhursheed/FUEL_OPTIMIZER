@@ -1,0 +1,52 @@
+# Project Name
+    FUEL OPTIMIZER
+## Technologies Used
+
+- Django 3.2.23
+- Python 3.x
+- SQLite3
+
+## Installation
+
+    git clone https://github.com/yourusername/yourproject.git
+    cd yourproject   
+
+### Prerequisites
+
+- Python 3.x
+- pip
+- Virtual environment (optional but recommended)
+
+### Steps to Install
+
+1. **Clone the repository:**
+
+   ```
+    git clone https://github.com/yourusername/yourproject.git
+    cd yourproject
+   ```
+
+2. **Set up a virtual environment:**
+
+    ```
+        python -m venv env
+        source env/bin/activate  # On Windows use `env\Scripts\activate`
+    ```
+
+3. **Project setup:**
+
+    ```
+        pip install -r requirements.txt
+        python manage.py makemigrations
+        python manage.py migrate
+    ```
+
+4. **Run Server:**
+
+    ```
+        python manage.py runserver
+    ```
+Access the application:
+Open your web browser and go to http://127.0.0.1:8000.
+
+Live URL:
