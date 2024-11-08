@@ -142,7 +142,6 @@ class RoutePlannerSerializer(serializers.Serializer):
             list: A list of dictionaries containing optimal fuel stop information or raises an error.
         """
         fuel_prices = FuelPrice.objects.order_by('price_per_gallon')
-        
         # Check if there are no fuel prices available
         if not fuel_prices.exists():
             raise ValueError("No fuel prices available to calculate the total cost.")
@@ -150,22 +149,31 @@ class RoutePlannerSerializer(serializers.Serializer):
         optimal_stops = []
         stops_required = int(route_distance // VEHICLE_RANGE_MILES)
         current_distance = 0
+        previous_state = None
 
         for _ in range(stops_required):
-            stop = fuel_prices.first()  # Get the cheapest fuel price
-            if stop is None:  # Safety check, though it should not happen now
+            cheapest_price = fuel_prices.first()
+            if cheapest_price is None:  # Safety check, though it should not happen now
                 raise ValueError("No available fuel prices.")
-            
+
+            # Skip the current stop if it's in the same state as the previous stop
+            if previous_state == cheapest_price.state:
+                fuel_prices = fuel_prices.exclude(state=previous_state).order_by('price_per_gallon')
+                cheapest_price = fuel_prices.first()
+                if cheapest_price is None:
+                    break
+
             optimal_stops.append({
-                'city': stop.city,
-                'state': stop.state,
-                'price_per_gallon': stop.price_per_gallon,
+                'city': cheapest_price.city,
+                'state': cheapest_price.state,
+                'price_per_gallon': cheapest_price.price_per_gallon,
                 'distance_from_start': current_distance + VEHICLE_RANGE_MILES
             })
+            previous_state = cheapest_price.state
             current_distance += VEHICLE_RANGE_MILES
+            fuel_prices = fuel_prices.exclude(state=previous_state).order_by('price_per_gallon')
 
         return optimal_stops
-
 
     def calculate_total_cost(self, route_distance):
         """
